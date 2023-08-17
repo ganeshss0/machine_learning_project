@@ -47,3 +47,18 @@ To send version/changes to github
 ```
 git push origin main
 ```
+
+Build Docker Image
+```
+docker build -t <image_name>:<tagname> .
+```
+> Note: Image name for docker must be lowercase.
+
+To list docker image
+```
+docker images
+```
+Run docker images
+```
+docker run -p 5000:5000 -e PORT:5000 <Image ID>
+```
