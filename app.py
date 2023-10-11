@@ -7,7 +7,8 @@ CORS(app)
 
 @app.route('/', methods=['POST', 'GET'])
 @cross_origin()
-def homepage():
+def homepage() -> str:
+    '''Render HomePage'''
     return 'This page is running'
 
 if __name__ == '__main__':

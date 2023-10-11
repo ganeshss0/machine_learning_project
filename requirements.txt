@@ -2,5 +2,6 @@ pandas
 numpy
 flask
 seaborn
+Flask-Cors
 gunicorn
 -e .
