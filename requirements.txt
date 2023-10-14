@@ -3,4 +3,5 @@ numpy
 flask
 seaborn
 gunicorn
--e.
+scikit-learn
+-e .
