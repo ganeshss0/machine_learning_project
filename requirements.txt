@@ -2,6 +2,10 @@ pandas
 numpy
 flask
 seaborn
+Flask-Cors
 gunicorn
+<<<<<<< HEAD
 scikit-learn
+=======
+>>>>>>> 105f4045631a9d72d9532803f7c2a01b3372ee7d
 -e .
