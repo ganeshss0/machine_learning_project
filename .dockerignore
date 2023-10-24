@@ -1,2 +1,9 @@
 .git
 .gitignore
+.github
+*.egg-info/
+
+# licence
+LICENCE
+README.md
+test.ipynb

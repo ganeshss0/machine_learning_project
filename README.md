@@ -62,3 +62,7 @@ Run docker images
 ```
 docker run -p 5000:5000 -e PORT:5000 <Image ID>
 ```
+Install Package
+```
+python setup.py install
+```
