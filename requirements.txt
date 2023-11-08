@@ -5,4 +5,5 @@ seaborn
 Flask-Cors
 gunicorn
 scikit-learn
+PyYAML
 -e .
