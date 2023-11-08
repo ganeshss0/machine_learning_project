@@ -23,7 +23,7 @@ os.makedirs(
 logging.basicConfig(
     filename=LOG_FILE_PATH,
     filemode="w",
-    format='[%(asctime)s] | %(levelname)s | %(lineno)d | %(filename)s | %(funcName)s() | %(message)s',
+    format='[%(asctime)s] | %(levelname)s | %(filename)s | %(funcName)s() | %(lineno)d | %(message)s',
     level=logging.INFO
 )
 
