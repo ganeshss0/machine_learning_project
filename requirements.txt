@@ -6,4 +6,5 @@ Flask-Cors
 gunicorn
 scikit-learn
 PyYAML
+evidently
 -e .

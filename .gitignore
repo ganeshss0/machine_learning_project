@@ -164,3 +164,9 @@ cython_debug/
 
 # Testing Notebook
 test.ipynb
+
+# test file
+demo.py
+
+# Data
+artifact/
