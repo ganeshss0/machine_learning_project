@@ -66,6 +66,7 @@ class DataIngestion:
 
     def train_test_split(self) -> DataIngestionArtifact:
         try:
+            
             raw_data_dir = self.data_ingestion_config.raw_data_dir
 
             raw_data_file_name = os.listdir(path=raw_data_dir)[0]
