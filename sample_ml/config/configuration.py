@@ -31,30 +31,43 @@ class Configuration:
         try:
             logging.info('Fetching Data Ingestion Config')
             data_ingestion_config = self.config_info[DATA_INGESTION_CONFIG_KEY]
+            
             logging.info('Creating Data Ingestion Artifact Directory Path')
-            data_ingestion_artifact_dir = os.path.join(self.training_pipeline_config.artifact_dir,
+            data_ingestion_artifact_dir = os.path.join(
+                self.training_pipeline_config.artifact_dir,
                 DATA_INGESTION_ARTIFACT_DIR,
                 self.time_stamp
-                )
+            )
             
             logging.info('Creating Download File Path')
-            tgz_data_dir = os.path.join(data_ingestion_artifact_dir,
-                                        data_ingestion_config[DATA_INGESTION_TGZ_DOWNLOAD_DIR_KEY])
+            tgz_data_dir = os.path.join(
+                data_ingestion_artifact_dir,
+                data_ingestion_config[DATA_INGESTION_TGZ_DOWNLOAD_DIR_KEY]
+            )
             
             logging.info('Creating Extracted File Path')
-            raw_data_dir = os.path.join(data_ingestion_artifact_dir,
-                                        data_ingestion_config[DATA_INGESTION_RAW_DATA_DIR_KEY])
+            raw_data_dir = os.path.join(
+                data_ingestion_artifact_dir,
+                data_ingestion_config[DATA_INGESTION_RAW_DATA_DIR_KEY]
+            )
             
             logging.info('Creating Ingested Data Path for Train and Test Files')
-            ingested_data_dir = os.path.join(data_ingestion_artifact_dir,
-                                                data_ingestion_config[INGESTION_DATA_DIR_KEY])
+            ingested_data_dir = os.path.join(
+                data_ingestion_artifact_dir,
+                data_ingestion_config[INGESTION_DATA_DIR_KEY]
+            )
             
             logging.info('Creating Train File Path')
-            train_data_dir = os.path.join(ingested_data_dir,
-                                            data_ingestion_config[DATA_INGESTION_TRAIN_DIR_KEY])
+            train_data_dir = os.path.join(
+                ingested_data_dir,
+                data_ingestion_config[DATA_INGESTION_TRAIN_DIR_KEY]
+            )
+            
             logging.info('Creating Test File Path')
-            test_data_dir = os.path.join(ingested_data_dir,
-                                            data_ingestion_config[DATA_INGESTION_TEST_DIR_KEY])
+            test_data_dir = os.path.join(
+                ingested_data_dir,
+                data_ingestion_config[DATA_INGESTION_TEST_DIR_KEY]
+            )
             
             logging.info('Data Ingestion Config')
             return DataIngestionConfig(
@@ -68,20 +81,54 @@ class Configuration:
             
             raise SampleMLException(e, sys) from e
 
+
     def get_data_transformation_config(self) -> DataTransformationConfig:
         pass
 
-    def get_data_validation_config(self) -> DataValidationConfig:
-        data_validation_config = self.config_info[DATA_VALIDATION_CONFIG_KEY]
 
-        # schme_file = os.path.
-        pass
+    def get_data_validation_config(self) -> DataValidationConfig:
+        try:
+            data_validation_config = self.config_info[DATA_VALIDATION_CONFIG_KEY]
+
+            data_validation_artifact_dir = os.path.join(
+                self.training_pipeline_config.artifact_dir,
+                DATA_VALIDATION_ARTIFACT_DIR,
+                self.time_stamp
+            )
+            
+            schema_file = os.path.join(
+                ROOT_DIR, 
+                data_validation_config[DATA_VALIDATION_SCHEMA_DIR_KEY], 
+                data_validation_config[DATA_VALIDATION_SCHEMA_FILE_KEY]
+            )
+
+            report_file = os.path.join(
+                data_validation_artifact_dir, 
+                data_validation_config[DATA_VALIDATION_REPORT_FILE_KEY]
+            )
+
+            report_page_file = os.path.join(
+                data_validation_artifact_dir, 
+                data_validation_config[DATA_VALIDATION_REPORT_PAGE_FILE_KEY]
+            )
+
+
+            return DataValidationConfig(
+                schema_file_path=schema_file,
+                report_file_path=report_file,
+                report_page_file_path=report_page_file
+            )
+        except Exception as e:
+            raise SampleMLException(e, sys) from e
+
 
     def get_model_trainer_config(self) -> ModelTrainerConfig:
         model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
 
+
     def get_model_evaluation_config(self) -> ModelEvaluationConfig:
         model_evaluation_config = self.config_info[MODEL_EVALUATION_CONFIG_KEY]
+
 
     def get_model_pusher_config(self) -> ModelPusherConfig:
         model_pusher_config = self.config_info[MODEL_PUSHER_CONFIG_KEY]
