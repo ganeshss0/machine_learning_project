@@ -16,16 +16,12 @@ class SampleMLException(Exception):
         error_detail: object of sys module
         '''
         _, _, exec_tb = error_detail.exc_info()
-
-        line_number = exec_tb.tb_lineno
+        
+        exception_block_line_number = exec_tb.tb_frame.f_lineno
+        try_block_line_number = exec_tb.tb_lineno
         file_name = exec_tb.tb_frame.f_code.co_filename
 
-        error = f'''
-        Error occured in script: 
-        [{file_name}] at 
-        line number {line_number}] 
-        error message: [{error}]
-        '''
+        error = f'Error occured in script: [{file_name}]\nLine number: [{try_block_line_number}]\nException line number: [{exception_block_line_number}]\nerror message: [\n-> {error}]'
 
         return error
     
