@@ -11,8 +11,9 @@ def read_yaml(file_path: str) -> dict:
     try:
         logging.info('Reading Config File')
         with open(file=file_path, mode='r', encoding='utf-8') as file:
-            return safe_load(file)
+            config = safe_load(file)
         logging.info('Config File Reading Successfull')
+        return config
         
     except Exception as e:
         raise SampleMLException(e, sys) from e
