@@ -13,7 +13,7 @@ class DataIngestion:
 
     def __init__(self, data_ingestion_config: DataIngestionConfig) -> None:
         try:
-            # logging.info()
+            logging.info(f'{"="*10} Data Ingestion Log Start {"="*10}')
             self.data_ingestion_config = data_ingestion_config
         
         except Exception as e:
@@ -127,3 +127,7 @@ class DataIngestion:
             return data_ingestion_artifact
         except Exception as e:
             raise SampleMLException(e, sys) from e
+
+    
+    def __del__(self):
+        logging.info(f'{"="*10} Data Ingestion Log Complete {"="* 10}')
