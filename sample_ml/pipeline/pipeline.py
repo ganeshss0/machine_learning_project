@@ -7,6 +7,7 @@ from sample_ml.entity.artifact_entity import *
 from sample_ml.entity.config_entity import DataIngestionConfig
 from sample_ml.components.data_ingestion import DataIngestion
 from sample_ml.components.data_validation import DataValidation
+from sample_ml.components.data_transformation import DataTransformation
 
 
 
@@ -31,6 +32,8 @@ class Pipeline:
             raise SampleMLException(e, sys) from e
     
     def start_data_validation(self, data_ingestion_artifact: DataValidationArtifact) -> DataValidationArtifact:
+        '''Initiates Data Validation Steps.'''
+        
         try:
             logging.info(f'{"#"*5} Data Validation Pipeline Start {"#"*5}')
             data_validation = DataValidation(
@@ -42,9 +45,21 @@ class Pipeline:
         except Exception as e:
             logging.error(f'Data Validation Pipeline Failed: {e}')
 
-    def start_data_transformation(self) -> DataTransformationArtifact:
+    def start_data_transformation(self, 
+                                data_ingestion_artifact: DataIngestionArtifact,
+                                data_validation_artifact: DataValidationArtifact
+                                ) -> DataTransformationArtifact:
         try:
-            pass
+            logging.info(f'{"#"*5} Data Transformation Pipeline Start {"#"*5}')
+            data_transformation = DataTransformation(
+                data_transformation_config=self.config.get_data_transformation_config(),
+                data_ingestion_artifact=data_ingestion_artifact,
+                data_validation_artifact=data_validation_artifact
+            )
+            data_transformation_artifact = data_transformation.initiate_data_transformation()
+
+            logging.info(f'{"#"*5} Data Transformation Pipeline Successful {"#"*5}')
+            return data_transformation_artifact
         except Exception as e:
             logging.error(f'Data Transformation Failed: {e}')
 
@@ -55,6 +70,10 @@ class Pipeline:
         try:
             data_ingestion_artifact = self.start_data_ingestion()
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact)
+            data_transformation_artifact = self.start_data_transformation(
+                data_ingestion_artifact=data_ingestion_artifact,
+                data_validation_artifact=data_validation_artifact
+            )
 
 
         except Exception as e:
