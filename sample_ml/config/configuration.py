@@ -83,7 +83,45 @@ class Configuration:
 
 
     def get_data_transformation_config(self) -> DataTransformationConfig:
-        pass
+        try:
+            data_transformation_config = self.config_info[DATA_TRANSFORMATION_CONFIG_KEY]
+
+            data_transformation_artifact_dir = os.path.join(
+                self.training_pipeline_config.artifact_dir,
+                DATA_TRANSFORMATION_ARTIFACT_KEY,
+                self.time_stamp
+            )
+            
+            add_bedroom_per_room = data_transformation_config[DATA_TRANSFORMATION_ADD_BEDROOM_PER_ROOM_KEY]
+
+            transformed_test_dir = os.path.join(
+                data_transformation_artifact_dir,
+                data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY],
+                data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_TEST_DIR_KEY]
+            )
+
+            transformed_train_dir = os.path.join(
+                data_transformation_artifact_dir,
+                data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY],
+                data_transformation_config[DATA_TRANSFORMATION_TRANSFORMED_TRAIN_DIR_KEY]
+            )
+
+            preprocessor_object_file_path = os.path.join(
+                data_transformation_artifact_dir,
+                data_transformation_config[DATA_TRANSFORMATION_PREPROCESSOR_DIR_KEY],
+                data_transformation_config[DATA_TRANSFORMATION_PREPROCESSOR_FILE_KEY]
+            )
+
+            logging.info('Data Transformation Config')
+            return DataTransformationConfig(
+                add_bedroom_per_room=add_bedroom_per_room,
+                transformed_train_dir=transformed_train_dir,
+                transformed_test_dir=transformed_test_dir,
+                preprocessed_object_file_path=preprocessor_object_file_path
+            )
+        
+        except Exception as e:
+            raise SampleMLException(e, sys)
 
 
     def get_data_validation_config(self) -> DataValidationConfig:
