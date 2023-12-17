@@ -1,8 +1,12 @@
 import os
 from datetime import datetime
+import inspect
 
 
-ROOT_DIR = os.getcwd()
+# ROOT_DIR = os.getcwd()
+CURRENT_DIR = os.path.dirname(inspect.getfile(inspect.currentframe()))
+ROOT_DIR = os.path.abspath(os.path.join(CURRENT_DIR, os.pardir, os.pardir))
+os.chdir(ROOT_DIR)
 
 CONFIG_DIR = 'config'
 CONFIG_FILE = 'config.yml'
@@ -46,10 +50,10 @@ DATA_TRANSFORMATION_CONFIG_KEY = 'data_transformation_config'
 DATA_TRANSFORMATION_ARTIFACT_KEY = 'data_transformation'
 DATA_TRANSFORMATION_ADD_BEDROOM_PER_ROOM_KEY = 'add_bedroom_per_room'
 DATA_TRANSFORMATION_TRANSFORMED_DIR_KEY = 'transformed_dir'
-DATA_TRANSFORMATION_TRANSFORMED_TRAIN_DIR_KEY = 'train'
-DATA_TRANSFORMATION_TRANSFORMED_TEST_DIR_KEY = 'test'
-DATA_TRANSFORMATION_PREPROCESSOR_DIR_KEY = 'preprocessor'
-DATA_TRANSFORMATION_PREPROCESSOR_FILE_KEY = 'preprocessor.joblib'
+DATA_TRANSFORMATION_TRANSFORMED_TRAIN_DIR_KEY = 'transformed_train_dir'
+DATA_TRANSFORMATION_TRANSFORMED_TEST_DIR_KEY = 'transformed_test_dir'
+DATA_TRANSFORMATION_PREPROCESSOR_DIR_KEY = 'preprocessing_dir'
+DATA_TRANSFORMATION_PREPROCESSOR_FILE_KEY = 'preprocessor_object_file_name'
 
 # Model Trainer Config
 MODEL_TRAINER_CONFIG_KEY = 'model_trainer_config'
@@ -69,3 +73,20 @@ MODEL_EVALUATION_FILE_KEY = 'model_evaluation_file_name'
 MODEL_PUSHER_CONFIG_KEY = 'model_pusher_config'
 MODEL_PUSHER_ARTIFACT_KEY = 'model_pusher'
 MODEL_PUSHER_MODEL_EXPORT_DIR = 'model_export_dir'
+
+
+
+# Datasets Config
+COLUMN_TOTAL_ROOMS = "total_rooms"
+COLUMN_POPULATION = "population"
+COLUMN_HOUSEHOLDS = "households"
+COLUMN_TOTAL_BEDROOM = "total_bedrooms"
+COLUMN_OCEAN_PROXIMITY = 'ocean_proximity'
+
+# Schema keys
+SCHEMA_COLUMNS_KEY = 'columns'
+SCHEMA_NUMERICAL_COLUMNS_KEY = 'numerical_columns'
+SCHEMA_CATEGORICAL_COLUMNS_KEY = 'categorical_columns'
+SCHEMA_DOMAIN_VALUE_KEY = 'domain_value'
+SCHEMA_OCEAN_PROXIMITY_COLUMN_KEY = 'ocean_proximity'
+SCHEMA_TARGET_COLUMN_KEY = 'target_column'
