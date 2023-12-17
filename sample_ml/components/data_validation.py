@@ -3,7 +3,8 @@ from sample_ml.logger import logging
 from sample_ml.exception import SampleMLException
 from sample_ml.entity.config_entity import DataValidationConfig
 from sample_ml.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
-from sample_ml.utils.utility import read_yaml
+from sample_ml.utils.utility import read_yaml, get_dataset
+from sample_ml.constants import SCHEMA_COLUMNS_KEY
 import pandas as pd
 import json
 
@@ -19,7 +20,7 @@ class DataValidation:
 
     def __init__(self, data_validation_config: DataValidationConfig, data_ingestion_artifact: DataIngestionArtifact) -> None:
         try:
-            # logging.info()
+            logging.info(f'{"="*10} Data Validation Log Start {"="*10}')
             self.data_validation_config = data_validation_config
             self.data_ingestion_artifact = data_ingestion_artifact
         except Exception as e:
@@ -55,54 +56,54 @@ class DataValidation:
 
 
 
-    def validate_dataset_schema(self) -> bool:
-        try:
+    # def validate_dataset_schema(self) -> bool:
+    #     try:
             
-            # assignment validate training and testing dataset using schema file
-            # num of columns
-            # names of columns
-            # check the value of ocean proximity
+    #         # assignment validate training and testing dataset using schema file
+    #         # num of columns
+    #         # names of columns
+    #         # check the value of ocean proximity
 
 
-            train_data_path = self.data_ingestion_artifact.train_data_path
-            train_df = pd.read_csv(train_data_path)
+    #         train_data_path = self.data_ingestion_artifact.train_data_path
+    #         train_df = pd.read_csv(train_data_path)
 
-            schema_path = self.data_validation_config.schema_file_path
-            schema = read_yaml(file_path=schema_path)
+    #         schema_path = self.data_validation_config.schema_file_path
+    #         schema = read_yaml(file_path=schema_path)
 
-            logging.info('Checking Columns in dataframe...')
-            schema_columns_dtype = schema['columns']
-            dataframe_columns = set(train_df.columns.str.lower())
-            schema_cols = set(map(str.lower, schema_columns_dtype))
+    #         logging.info('Checking Columns in dataframe...')
+    #         schema_columns_dtype = schema[SCHEMA_COLUMNS_KEY]
+    #         dataframe_columns = set(train_df.columns.str.lower())
+    #         schema_cols = set(map(str.lower, schema_columns_dtype))
 
-            # checking columns
+    #         # checking columns
             
-            if dataframe_columns == schema_cols:
-                logging.info('All columns matched')
-                logging.info('Checking values in ocean proximity...')
+    #         if dataframe_columns == schema_cols:
+    #             logging.info('All columns matched')
+    #             logging.info('Checking values in ocean proximity...')
 
-                schema_ocean_proximity_value = set(schema['domain_value']['ocean_proximity'])
+    #             schema_ocean_proximity_value = set(schema['domain_value']['ocean_proximity'])
 
-                data_ocean_proximity_value = set(train_df['ocean_proximity'].unique())
+    #             data_ocean_proximity_value = set(train_df['ocean_proximity'].unique())
 
-                if schema_ocean_proximity_value == data_ocean_proximity_value:
-                    logging.info('ocean_proximity values matched')   
-                else:
-                    missing_value = schema_ocean_proximity_value - data_ocean_proximity_value
-                    extra_value = data_ocean_proximity_value - schema_ocean_proximity_value
-                    message = f'Missing ocean_proximity values: {missing_value} | Extra ocean_proximity values: {extra_value}'
-                    logging.warning(message)
-                    raise ValueError(message)
-            else:
-                missing_cols = schema_cols - dataframe_columns
-                extra_cols = dataframe_columns - schema_cols
-                message = f'Missing Columns: {missing_cols} | Extra Columns: {extra_cols}'
-                logging.warning(message)
-                raise ValueError(message)
+    #             if schema_ocean_proximity_value == data_ocean_proximity_value:
+    #                 logging.info('ocean_proximity values matched')   
+    #             else:
+    #                 missing_value = schema_ocean_proximity_value - data_ocean_proximity_value
+    #                 extra_value = data_ocean_proximity_value - schema_ocean_proximity_value
+    #                 message = f'Missing ocean_proximity values: {missing_value} | Extra ocean_proximity values: {extra_value}'
+    #                 logging.warning(message)
+    #                 raise ValueError(message)
+    #         else:
+    #             missing_cols = schema_cols - dataframe_columns
+    #             extra_cols = dataframe_columns - schema_cols
+    #             message = f'Missing Columns: {missing_cols} | Extra Columns: {extra_cols}'
+    #             logging.warning(message)
+    #             raise ValueError(message)
         
 
-        except Exception as e:
-            raise SampleMLException(e, sys) from e
+    #     except Exception as e:
+    #         raise SampleMLException(e, sys) from e
         
 
 
@@ -117,7 +118,8 @@ class DataValidation:
 
 
 
-    def get_and_save_data_drift_report(self):
+    def get_and_save_data_drift_report(self) -> dict:
+        '''Generate data drift report and saves it in Artifact directory.'''
         try:
             profile = Profile(
                 sections=[DataDriftProfileSection()]
@@ -162,17 +164,26 @@ class DataValidation:
 
 
     def get_train_test_dataframe(self):
-        train_data = pd.read_csv(self.data_ingestion_artifact.train_data_path)
-        test_data = pd.read_csv(self.data_ingestion_artifact.test_data_path)
+    
+        schema = read_yaml(self.data_validation_config.schema_file_path)
+        train_data = get_dataset(
+            file_path=self.data_ingestion_artifact.train_data_path,
+            schema=schema
+        )
+        test_data = get_dataset(
+            file_path=self.data_ingestion_artifact.test_data_path,
+            schema=schema
+        )
         return train_data, test_data
 
 
 
     def initiate_data_validation(self):
         try:
+            logging.info('Initiating Data Vaidation')
             self.is_train_test_file_exists()
-            self.validate_dataset_schema()
             self.is_data_drift_found()
+
             return DataValidationArtifact(
                 schema_file_path=self.data_validation_config.schema_file_path,
                 report_file_path=self.data_validation_config.report_file_path,
@@ -183,3 +194,7 @@ class DataValidation:
             
         except Exception as e:
             raise SampleMLException(e, sys) from e
+
+
+    def __del__(self):
+        logging.info(f'{"="*10} Data Validation Log Complete {"="*10}')
