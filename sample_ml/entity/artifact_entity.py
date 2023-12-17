@@ -25,6 +25,10 @@ DataValidationArtifact = namedtuple(
 DataTransformationArtifact = namedtuple(
     'DataTransformationArtifact',
     [
-        'k'
+        'transformed_train_path',
+        'transformed_test_path',
+        'preprocessor_object_file_path',
+        'is_transformed',
+        'message'
     ]
 )
