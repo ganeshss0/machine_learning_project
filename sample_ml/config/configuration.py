@@ -161,7 +161,44 @@ class Configuration:
 
 
     def get_model_trainer_config(self) -> ModelTrainerConfig:
-        model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
+        try:
+            model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
+
+            # Artifact Directory
+            artifact_dir = self.training_pipeline_config.artifact_dir
+            
+            model_trainer_artifact_dir = os.path.join(
+                artifact_dir,
+                MODEL_TRAINER_ARTIFACT_KEY,
+                self.time_stamp
+            )
+
+            base_accuracy = model_trainer_config[MODEL_TRAINER_BASE_ACCURACY_KEY]
+
+            model_config_file_path = os.path.join(
+                ROOT_DIR,
+                model_trainer_config[MODEL_TRAINER_MODEL_CONFIG_DIR_KEY],
+                model_trainer_config[MODEL_TRAINER_MODEL_CONFIG_FILE_KEY]
+            )
+
+            trained_model_file_path = os.path.join(
+                model_trainer_artifact_dir,
+                model_trainer_config[MODEL_TRAINER_TRAINED_MODEL_DIR_KEY],
+                model_trainer_config[MODEL_TRAINER_MODEL_FILE_KEY]
+            )
+
+            model_trainer_config = ModelTrainerConfig(
+                model_config_file_path=model_config_file_path,
+                trained_model_file_path=trained_model_file_path,
+                base_accuracy=base_accuracy
+            )
+
+            logging.info(f"Model Trainer Config: {model_trainer_config}")
+
+            return model_trainer_config
+
+        except Exception as e:
+            raise SampleMLException(e, sys) from e
 
 
     def get_model_evaluation_config(self) -> ModelEvaluationConfig:
