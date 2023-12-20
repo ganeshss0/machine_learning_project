@@ -61,7 +61,7 @@ MODEL_TRAINER_ARTIFACT_KEY = 'model_trainer'
 MODEL_TRAINER_TRAINED_MODEL_DIR_KEY = 'trained_model_dir'
 MODEL_TRAINER_MODEL_FILE_KEY = 'model_file_name'
 MODEL_TRAINER_BASE_ACCURACY_KEY = 'base_accuracy'
-MODEL_TRAINER_MODEL_CONFIG_DIR_KEY = 'config'
+MODEL_TRAINER_MODEL_CONFIG_DIR_KEY = 'model_config_dir'
 MODEL_TRAINER_MODEL_CONFIG_FILE_KEY = 'model_config_file_name'
 
 # Model Evaluation Config
