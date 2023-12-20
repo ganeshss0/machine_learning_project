@@ -1,5 +1,5 @@
 import sys, os
-from yaml import safe_load
+from yaml import safe_load, dump
 from sample_ml.exception import SampleMLException
 from sample_ml.logger import logging
 import pandas as pd
@@ -9,13 +9,13 @@ import numpy as np
 
 
 
-def read_yaml(file_path: str) -> dict:
+def read_yaml(file_path: str, encoding:str='utf-8') -> dict:
     '''Reads a YAML file and returns the contents as dictonary object.'''
 
     try:
         logging.info('Reading Config File')
-        with open(file=file_path, mode='r', encoding='utf-8') as file:
-            config = safe_load(file)
+        with open(file=file_path, encoding=encoding) as file:
+            config: dict = safe_load(file)
         logging.info('Config File Reading Successfull')
         return config
         
@@ -23,6 +23,20 @@ def read_yaml(file_path: str) -> dict:
         raise SampleMLException(e, sys) from e
 
 
+def write_yaml(file_path: str, data: dict, encoding: str='utf-8', **kwargs) -> str:
+    '''Write a YAML file and return the file_path of written YAML file.'''
+    try:
+        if not file_path.endswith(('.yml', 'yaml')):
+            file_path = file_path + '.yml'
+        logging.info(f'Writing Data to YAML File at {file_path}')
+        with open(file=file_path, mode='w', encoding=encoding) as file:
+            dump(data=data, stream=file, encoding=encoding, **kwargs)
+        logging.info('Writing Data to YAML File Successfull')
+        
+        return file_path
+    
+    except Exception as e:
+        raise SampleMLException(e, sys) from e
 
 
 
