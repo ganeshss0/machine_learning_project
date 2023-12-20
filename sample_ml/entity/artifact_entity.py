@@ -32,3 +32,13 @@ DataTransformationArtifact = namedtuple(
         'message'
     ]
 )
+
+
+ModelTrainerArtifact = namedtuple(
+    'ModelTrainerArtifact',
+    [
+        'trained_model_file_path',
+        'is_model_trained',
+        'message'
+    ]
+)
