@@ -198,12 +198,34 @@ class Configuration:
             return model_trainer_config
 
         except Exception as e:
+            logging.error(e.__str__())
             raise SampleMLException(e, sys) from e
 
 
     def get_model_evaluation_config(self) -> ModelEvaluationConfig:
-        model_evaluation_config = self.config_info[MODEL_EVALUATION_CONFIG_KEY]
+        try:
+            model_evaluation_config = self.config_info[MODEL_EVALUATION_CONFIG_KEY]
 
+            artifact_dir = self.training_pipeline_config.artifact_dir
+
+            model_evaluation_artifact_dir = os.path.join(
+                artifact_dir,
+                MODEL_EVALUATION_ARTIFACT_KEY,
+                self.time_stamp
+            )
+            model_evaluation_file_name = os.path.join(
+                model_evaluation_artifact_dir,
+                model_evaluation_config[MODEL_EVALUATION_FILE_KEY]
+            )
+            model_evaluation_config = ModelEvaluationConfig(
+                model_evaluation_file=model_evaluation_file_name,
+                time_stamp=self.time_stamp
+            )
+            logging.info(f'Model Evaluation Config: {model_evaluation_config}')
+            return model_evaluation_config
+        except Exception as e:
+            logging.error(e.__str__())
+            raise SampleMLException(e, sys)
 
     def get_model_pusher_config(self) -> ModelPusherConfig:
         model_pusher_config = self.config_info[MODEL_PUSHER_CONFIG_KEY]
