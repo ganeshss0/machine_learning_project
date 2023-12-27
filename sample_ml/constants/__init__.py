@@ -74,7 +74,10 @@ MODEL_PUSHER_CONFIG_KEY = 'model_pusher_config'
 MODEL_PUSHER_ARTIFACT_KEY = 'model_pusher'
 MODEL_PUSHER_MODEL_EXPORT_DIR = 'model_export_dir'
 
-
+# Model Evaluation Config
+MODEL_EVALUATION_CONFIG_KEY = 'model_evaluation_config'
+MODEL_EVALUATION_FILE_NAME_KEY = 'model_evaluation_file_name'
+MODEL_EVALUATION_ARTIFACT_KEY = 'model_evaluation'
 
 # Datasets Config
 COLUMN_TOTAL_ROOMS = "total_rooms"
