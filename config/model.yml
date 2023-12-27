@@ -21,7 +21,7 @@ model_selection:
     module: sklearn.ensemble
     class: RandomForestRegressor
     params:
-      min_sample_leaf: 3
+      min_samples_leaf: 3
     search_param_grid:
-      min_sample_leaf:
+      min_samples_leaf:
         - 6
