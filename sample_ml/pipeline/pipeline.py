@@ -8,6 +8,7 @@ from sample_ml.entity.config_entity import DataIngestionConfig
 from sample_ml.components.data_ingestion import DataIngestion
 from sample_ml.components.data_validation import DataValidation
 from sample_ml.components.data_transformation import DataTransformation
+from sample_ml.components.model_trainer import ModelTrainer
 
 
 
@@ -63,8 +64,21 @@ class Pipeline:
         except Exception as e:
             logging.error(f'Data Transformation Failed: {e}')
 
-    def start_model_trainer(self):
-        pass
+    def start_model_trainer(self,
+                            data_transformation_artifact: DataTransformationArtifact
+                            ) -> ModelTrainerArtifact:
+        try:
+            model_trainer = ModelTrainer(
+                model_trainer_config=self.config.get_model_trainer_config(),
+                data_transformation_artifact=data_transformation_artifact
+            )
+
+            model_trainer_artifact = model_trainer.initiate_model_trainer()
+            
+            logging.info(f'{"#"*5} Model Training Pipeline Successful {"#"*5}')
+            return model_trainer_artifact
+        except Exception as e:
+            raise SampleMLException(e, sys) from e
 
     def run_pipeline(self):
         try:
@@ -74,6 +88,7 @@ class Pipeline:
                 data_ingestion_artifact=data_ingestion_artifact,
                 data_validation_artifact=data_validation_artifact
             )
+            model_trainer_artifact = self.start_model_trainer(data_transformation_artifact)
 
 
         except Exception as e:
