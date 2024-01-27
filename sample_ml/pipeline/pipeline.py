@@ -46,6 +46,7 @@ class Pipeline:
         except Exception as e:
             logging.error(f'Data Validation Pipeline Failed: {e}')
 
+
     def start_data_transformation(self, 
                                 data_ingestion_artifact: DataIngestionArtifact,
                                 data_validation_artifact: DataValidationArtifact
@@ -93,3 +94,6 @@ class Pipeline:
 
         except Exception as e:
             raise SampleMLException(e, sys) from e
+        
+    def start(self):
+        self.run_pipeline()

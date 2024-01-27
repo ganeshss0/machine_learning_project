@@ -24,4 +24,20 @@ model_selection:
       min_samples_leaf: 3
     search_param_grid:
       min_samples_leaf:
-        - 6
+      - 4
+      - 6
+      - 12
+      n_estimators:
+      - 100
+      - 150
+      - 200
+      bootstrap:
+      - true
+      - false
+      oob_score:
+      - true
+      - false
+      max_depth:
+      - 2
+      - 4
+      - 6 

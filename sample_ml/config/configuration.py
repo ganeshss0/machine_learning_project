@@ -162,8 +162,6 @@ class Configuration:
 
     def get_model_trainer_config(self) -> ModelTrainerConfig:
         try:
-            model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
-
             # Artifact Directory
             artifact_dir = self.training_pipeline_config.artifact_dir
             
@@ -172,7 +170,9 @@ class Configuration:
                 MODEL_TRAINER_ARTIFACT_KEY,
                 self.time_stamp
             )
-
+            model_trainer_config = self.config_info[MODEL_TRAINER_CONFIG_KEY]
+            
+            # Base Accuracy of the Model
             base_accuracy = model_trainer_config[MODEL_TRAINER_BASE_ACCURACY_KEY]
 
             model_config_file_path = os.path.join(
